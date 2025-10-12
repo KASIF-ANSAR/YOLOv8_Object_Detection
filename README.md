@@ -19,33 +19,57 @@ The project detects objects, tracks them across frames, and counts them when the
 
 ## How It Works
 
-1. **YOLOv8 Object Detection**  
-   - We use YOLOv8 (`yolov8n.pt` or `yolov8l.pt`) to detect objects in each frame of the video.  
-   - The model predicts bounding boxes, class IDs, and confidence scores.
+---
 
-2. **Region of Interest (Mask)**  
-   - We define a mask image to specify the counting area.  
-   - Only objects inside the masked region are processed to reduce false detections.
+## 🚗 Vehicle Counting
 
-3. **Tracking with SORT**  
-   - SORT (Simple Online Realtime Tracking) assigns unique IDs to each detected object.  
-   - Tracks objects across multiple frames to ensure accurate counting.  
-   - Updates the positions of objects and maintains their IDs even if temporarily occluded.
-
-4. **Counting Logic**  
-   - Predefined **counting lines** (up/down) are drawn.  
-   - Each tracked object's center point is checked against these lines.  
-   - If the object crosses the line, it is counted once and the line turns green to indicate a successful count.
-
-5. **Visualization**  
-   - Bounding boxes with rounded corners using `cvzone.cornerRect`.  
-   - Object IDs displayed above each bounding box.  
-   - Total count of vehicles or people displayed on the frame.  
-   - Optional graphics overlay for a professional dashboard look.
+- Detects cars, buses, trucks, and motorbikes.
+- Uses **YOLOv8** for detection and **SORT tracker** for maintaining unique IDs.
+- Counts vehicles crossing a defined line in the frame.
+- Provides real-time visualization with bounding boxes, IDs, and count on screen.
 
 ---
 
-## Folder Structure
+## 🧍 People Counting
+
+- Detects people in crowded areas.
+- Supports counting in **two directions**: `Up` and `Down`.
+- Uses **masks** to focus on regions of interest.
+- Shows total counts for each direction in real-time.
+
+---
+
+## 🏎️ Speed-aware Vehicle Counter
+
+- Tracks vehicles **and calculates their speed** in km/h.
+- Uses:
+  - Pixel displacement between frames
+  - Video FPS
+  - Pixel-to-meter ratio (adjustable in `speed_counter.py`)
+- Counts only vehicles that **cross the counting line faster than a specified speed threshold** (default: 50 km/h).
+- Visualizes:
+  - Bounding boxes with unique IDs
+  - Vehicle speed above the box
+  - Counted vehicles turn the line green
+
+---
+
+## 🛠️ How It Works
+
+1. Load video feed and YOLOv8 model.
+2. Apply mask to focus on a region of interest.
+3. Detect objects with YOLOv8.
+4. Track objects using SORT tracker to maintain IDs across frames.
+5. For speed counter:
+   - Compute distance traveled per frame for each object.
+   - Convert pixel distance → real-world distance using `pixel_to_meter_ratio`.
+   - Multiply by FPS to get speed in meters/sec, then convert to km/h.
+   - Count objects based on speed and crossing line criteria.
+6. Display results with OpenCV overlays.
+
+---
+
+ 
 
 
 
