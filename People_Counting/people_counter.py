@@ -5,9 +5,11 @@ import cvzone
 import math
 from sort import *
 
-cap = cv2.VideoCapture("../Videos/people.mp4")  # For Video
 
 model = YOLO("../Yolo-Weights/yolov8l.pt")
+
+cap = cv2.VideoCapture("../Videos/people.mp4") 
+
 
 classNames = ["person", "bicycle", "car", "motorbike", "aeroplane", "bus", "train", "truck", "boat",
               "traffic light", "fire hydrant", "stop sign", "parking meter", "bench", "bird", "cat",
